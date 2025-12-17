@@ -1,86 +1,151 @@
-# Automated CI/CD for a Dockerized Node.js App
+# 🚀 Automated CI/CD Pipeline for a Dockerized Node.js Application
 
-Minimal Express app with GitHub Actions that tests, builds, and pushes a Docker image to Docker Hub.
+This project showcases a **complete, real-world CI/CD pipeline** built using **GitHub Actions** and **Docker** for a Node.js (Express) application.  
+Every code change is automatically **tested, built into a Docker image, and pushed to Docker Hub**, ensuring fast, reliable, and consistent deployments.
 
-## App
-- `GET /` returns a JSON message: `Hello, DevOps! CI/CD Pipeline Working Successfully`.
-- Code lives in `src/`, tests in `__tests__/`.
+---
 
-## Run locally
+## 📌 Project Overview
+In modern software development, manual testing and deployment slow down delivery and introduce errors.  
+This project demonstrates how **CI/CD automation** can eliminate these issues by integrating version control, automated testing, and containerization into a single workflow.
+
+---
+
+## ❗ Problem Statement
+Traditional deployment approaches suffer from:
+- Manual and error-prone testing
+- Inconsistent environments across systems
+- Delayed releases
+- Lack of automated verification
+
+These challenges make applications harder to scale and maintain.
+
+---
+
+## 💡 Solution
+An automated CI/CD pipeline was implemented with the following features:
+
+- **Git & GitHub** for version control
+- **GitHub Actions** to automatically run tests on every push
+- **Docker** to package the application into a portable container
+- **Docker Hub** to store and distribute verified images
+- Optional automated deployment via SSH
+
+Only **tested and verified code** is built and deployed.
+
+---
+
+## ⚙️ Application Details
+### Endpoints
+- **GET /**  
+  ```json
+  { "message": "Hello, DevOps! CI/CD Pipeline Working Successfully" }
+  ```
+
+- **GET /health**  
+  ```json
+  {
+    "status": "UP",
+    "uptime": 32.5,
+    "timestamp": "2025-12-17T20:24:08.980Z"
+  }
+  ```
+
+- Source code: `src/`  
+- Test cases: `__tests__/`
+
+---
+
+## 🛠️ Tech Stack
+- **Git** – Version control  
+- **GitHub** – Remote repository  
+- **GitHub Actions** – CI/CD automation  
+- **Node.js & Express** – Backend application  
+- **Jest & Supertest** – Testing  
+- **Docker** – Containerization  
+- **Docker Hub** – Image registry  
+
+---
+
+## ▶️ Run Locally (Without Docker)
 ```bash
 npm install
-npm start      # http://localhost:3000
-```
-
-## Test
-```bash
 npm test
+npm start
+```
+Access the app at:
+```
+http://localhost:3000
 ```
 
-## Docker
+---
+
+## 🐳 Run Using Docker
 ```bash
 docker build -t ci-cd-pipeline .
-docker run -p 3000:3000 ci-cd-pipeline
+docker run -d -p 3000:3000 --name ci-cd-pipeline ci-cd-pipeline
 ```
 
-### Verify locally
+### Verify
 ```bash
-# In another terminal after the container is running
 curl http://localhost:3000
-# Expect: {"message":"Hello, DevOps! CI/CD Pipeline Working Successfully"}
-
-# When finished, stop the container
-docker ps --filter "name=ci-cd-pipeline"
-docker stop ci-cd-pipeline
+curl http://localhost:3000/health
 ```
 
-## CI/CD (GitHub Actions)
-Workflow: `.github/workflows/ci.yml`
-- Triggers on push/PR to `main`/`master` (or manual).
-- Steps: install deps → run tests → build Docker image → push to Docker Hub when secrets are set.
+---
 
-### Required GitHub secrets for pushing
+## 🔄 CI/CD Pipeline (GitHub Actions)
+Workflow file:
+```
+.github/workflows/ci.yml
+```
+
+### Pipeline Flow
+```
+Code Push → Automated Tests → Docker Build → Docker Hub → Deployment
+```
+
+### Required GitHub Secrets
 - `DOCKERHUB_USERNAME`
-- `DOCKERHUB_TOKEN` (Docker Hub access token or password)
+- `DOCKERHUB_TOKEN`
 
-Image tag used in CI: `${DOCKERHUB_USERNAME}/ci-cd-pipeline` with `:latest` and `:${GITHUB_SHA}`.
-
-Live image on Docker Hub (pullable):
-- `docker pull whydeewakar/ci-cd-pipeline:latest`
-
-## Optional: Automated deploy to your server (SSH)
-The workflow includes a `deploy` job that runs after image push when these secrets exist:
-- `DEPLOY_HOST` (e.g., `203.0.113.10`)
-- `DEPLOY_USER` (SSH username)
-- `DEPLOY_KEY` (private key for that user; use a single-line value)
-- `DEPLOY_PORT` (optional, default 22)
-
-Prereqs on the target host:
-- Docker installed and the user can run it
-- Port 8080 available (change in the script if needed)
-
-What it does:
-- SSH to the host, `docker pull ${DOCKERHUB_USERNAME}/ci-cd-pipeline:latest`
-- Replace any existing container named `ci-cd-pipeline`
-- Run container detached on port 8080 → 3000 with env vars set:
-  - `APP_ENV=prod`
-  - `NODE_ENV=production`
-
-If you need different ports or env vars, adjust the run command in `.github/workflows/ci.yml`.
-
-## Optional deployment ideas
-- Run the container on a VM (e.g., EC2) or any container host (Render/Railway).
-- Keep the same image name for smooth pulls: `docker run -d -p 80:3000 ${DOCKERHUB_USERNAME}/ci-cd-pipeline:latest`.
-
-## Architecture (high-level)
+### Docker Image
+```bash
+docker pull whydeewakar/ci-cd-pipeline:latest
 ```
-Developer push/PR
-      |
-GitHub Actions (test → build → push image)
-      |
-Docker Hub (image registry)
-      |
-Deploy job (SSH) pulls image
-      |
-Target host: container runs app (port 8080 → 3000)
+
+---
+
+## 🧱 Architecture (High-Level)
 ```
+Developer Push
+      |
+GitHub Actions (Test → Build → Push)
+      |
+Docker Hub (Image Registry)
+      |
+Docker Container Deployment
+```
+
+---
+
+## 🔗 GitHub Repository
+👉 **Source Code:**  
+https://github.com/deewakar05/Automated-CI-CD
+
+---
+
+## 💬 Feedback & Engagement
+Any feedback, suggestions, and engagement are **highly appreciated** and help improve the project further. Feel free to open an issue or reach out.
+
+---
+
+## ✅ Conclusion
+This project demonstrates a **production-style CI/CD workflow** following DevOps best practices.  
+By automating testing, building, and containerization, it ensures faster releases, improved reliability, and consistent deployments across environments.
+
+---
+
+## 👤 Author
+**Deewakar Kumar**  
+Automated CI/CD Project
