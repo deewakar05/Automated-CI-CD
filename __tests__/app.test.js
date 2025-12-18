@@ -8,7 +8,7 @@ describe('GET /', () => {
     expect(response.status).toBe(200);
     expect(response.headers['content-type']).toMatch(/json/);
     expect(response.body).toEqual({
-      message: 'Hello, DevOps! CI/CD Pipeline Working Successfully',
+      message: 'Hello, DevOps! CI/CD Pipeline Working Successfully 🚀',
     });
   });
 });
