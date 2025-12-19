@@ -2,9 +2,9 @@ name: CI/CD
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, demo ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, demo ]
   workflow_dispatch:
 
 jobs:
@@ -33,13 +33,27 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      # 🔹 NEW: Determine Docker tags based on branch
+      - name: Set Docker tags
+        run: |
+          BRANCH_NAME=${GITHUB_REF##*/}
+          echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
+
+          if [ "$BRANCH_NAME" = "main" ]; then
+            echo "TAG_LATEST=latest" >> $GITHUB_ENV
+            echo "TAG_SHA=main-${GITHUB_SHA}" >> $GITHUB_ENV
+          else
+            echo "TAG_LATEST=${BRANCH_NAME}-latest" >> $GITHUB_ENV
+            echo "TAG_SHA=${BRANCH_NAME}-${GITHUB_SHA}" >> $GITHUB_ENV
+          fi
+
       - name: Build Docker image
         run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/ci-cd-pipeline:${{ github.sha }} .
+          docker build \
+            -t ${{ secrets.DOCKERHUB_USERNAME }}/ci-cd-pipeline:${{ env.TAG_LATEST }} \
+            -t ${{ secrets.DOCKERHUB_USERNAME }}/ci-cd-pipeline:${{ env.TAG_SHA }} .
 
       - name: Push Docker image
         run: |
-          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/ci-cd-pipeline:${{ github.sha }} \
-                     ${{ secrets.DOCKERHUB_USERNAME }}/ci-cd-pipeline:latest
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/ci-cd-pipeline:${{ github.sha }}
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/ci-cd-pipeline:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/ci-cd-pipeline:${{ env.TAG_LATEST }}
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/ci-cd-pipeline:${{ env.TAG_SHA }}
