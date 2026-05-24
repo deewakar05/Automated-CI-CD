@@ -1,0 +1,10 @@
+[2026-05-24T18:59:51.264Z] GET / - IP: ::ffff:127.0.0.1 - Agent: undefined
+[2026-05-24T18:59:51.277Z] GET /api/users - IP: ::ffff:127.0.0.1 - Agent: undefined
+[2026-05-24T18:59:51.325Z] GET /health - IP: ::ffff:127.0.0.1 - Agent: undefined
+[2026-05-24T19:05:20.529Z] GET / - IP: ::ffff:127.0.0.1 - Agent: undefined
+[2026-05-24T19:05:20.541Z] GET /api/users - IP: ::ffff:127.0.0.1 - Agent: undefined
+[2026-05-24T19:05:20.605Z] GET /health - IP: ::ffff:127.0.0.1 - Agent: undefined
+[2026-05-24T19:07:42.599Z] GET /?utm_source=chatgpt.com - IP: ::1 - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36
+[2026-05-24T19:07:42.869Z] GET /favicon.ico - IP: ::1 - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36
+[2026-05-24T19:08:02.740Z] GET /health?utm_source=chatgpt.com - IP: ::1 - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36
+[2026-05-24T19:08:15.021Z] GET /api/users?utm_source=chatgpt.com - IP: ::1 - Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36

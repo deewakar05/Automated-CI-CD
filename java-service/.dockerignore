@@ -1,0 +1,14 @@
+# Exclude local build target directory
+target/
+
+# Exclude local logs
+logs/
+*.log
+
+# Exclude IDE and system files
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+.DS_Store

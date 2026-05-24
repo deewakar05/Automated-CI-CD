@@ -1,0 +1,41 @@
+# =========================================================================
+# GitHub Actions CI/CD Pipeline - Java Spring Boot Service (Maven)
+# =========================================================================
+name: Java Maven CI Pipeline
+
+on:
+  # Trigger on push events to main or demo branches
+  push:
+    branches: [ main, demo ]
+  # Trigger on pull requests targeting main or demo branches
+  pull_request:
+    branches: [ main, demo ]
+  # Allows manual triggering of the workflow from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build-test:
+    name: Compile & Test Java Service
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout repo code
+      - name: Checkout Repository Code
+        uses: actions/checkout@v4
+
+      # Step 2: Provision Eclipse Temurin OpenJDK 17 environment
+      # Includes automatic caching of Maven local repository (~/.m2/repository) to speed up subsequent runs
+      - name: Set up Java JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      # Step 3: Run Maven compile and execute JUnit tests inside the java-service folder
+      # Uses the portable Maven wrapper script generated inside the directory
+      - name: Compile and Run JUnit Tests
+        run: |
+          cd java-service
+          chmod +x mvnw
+          ./mvnw clean test

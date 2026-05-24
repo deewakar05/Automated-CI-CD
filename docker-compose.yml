@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  # -------------------------------------------------------------------------
+  # Node.js Express Application Service (Root Container)
+  # -------------------------------------------------------------------------
+  node-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: node-backend-container
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - NODE_ENV=production
+    volumes:
+      # Bind mount mapping host logs folder to container logs folder
+      - ./logs:/app/logs
+    networks:
+      - devops-network
+    healthcheck:
+      # Native Node.js healthcheck calling the /health endpoint (avoids curl/wget dependency)
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/health', (res) => { if (res.statusCode === 200) process.exit(0); else process.exit(1); }).on('error', () => process.exit(1))"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
+  # -------------------------------------------------------------------------
+  # Java Spring Boot REST Microservice (Built with Maven)
+  # -------------------------------------------------------------------------
+  java-service:
+    build:
+      context: ./java-service
+      dockerfile: Dockerfile
+    container_name: java-service-container
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      # Shared bind mount mapping same logs folder to compile/store java-access.log
+      - ./logs:/app/logs
+    networks:
+      - devops-network
+    depends_on:
+      - node-backend
+    healthcheck:
+      # Standard Alpine wget-based check mapping the Spring /java/health route
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8080/java/health || exit 1"]
+      interval: 20s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+# ---------------------------------------------------------------------------
+# Networks Definition (Custom Bridge Network for Container Communication)
+# ---------------------------------------------------------------------------
+networks:
+  devops-network:
+    driver: bridge
+    name: devops-network

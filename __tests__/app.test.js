@@ -12,3 +12,22 @@ describe('GET /', () => {
     });
   });
 });
+
+describe('GET /api/users', () => {
+  it('returns sample DevOps users', async () => {
+    const response = await request(app).get('/api/users');
+
+    expect(response.status).toBe(200);
+    expect(response.headers['content-type']).toMatch(/json/);
+    expect(response.body).toEqual([
+      {
+        "id": 1,
+        "name": "DevOps Admin"
+      },
+      {
+        "id": 2,
+        "name": "Docker Service User"
+      }
+    ]);
+  });
+});

@@ -1,7 +1,23 @@
-node_modules
-npm-debug.log
-Dockerfile
-.dockerignore
-.git
-.github
-coverage
+# Exclude dependencies (we run npm ci inside the container)
+node_modules/
+
+# Exclude local environmental secrets
+.env
+.env.*
+
+# Exclude version control metadata
+.git/
+.gitignore
+
+# Exclude local logs (prevent local logs from bloating the image)
+logs/
+*.log
+
+# Exclude test coverage outputs
+coverage/
+
+# Exclude OS metadata
+.DS_Store
+
+# Exclude build files
+npm-debug.log*
